@@ -1,8 +1,3 @@
-import os
-os.system('rec.py')
-
-!pip install altair
-
 from __future__ import print_function
 
 import numpy as np
