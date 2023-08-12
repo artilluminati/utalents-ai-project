@@ -77,7 +77,7 @@ alt.data_transformers.enable('default', max_rows=None)
 #install Altair
 alt.data_transformers.enable('default', max_rows=None)
 
-Download the MovieLens Data, and create DataFrames containing movies, users, and ratings.
+# Download the MovieLens Data, and create DataFrames containing movies, users, and ratings.
 
 # Load each data set (users, ratings, and movies).
 users_cols = ['user_id', 'age', 'sex', 'occupation', 'zip_code']
@@ -205,9 +205,9 @@ users_ratings = (
 #     occupation_chart,
 #     data=users_ratings)
 
-***Movies***
+# ***Movies***
 
-It is also useful to look at information about the movies and their ratings.
+# It is also useful to look at information about the movies and their ratings.
 
 movies_ratings = movies.merge(
     ratings
@@ -235,7 +235,7 @@ genre_chart = alt.Chart().mark_bar().encode(
  .sort_values('rating mean', ascending=False)
  .head(10))
 
-The last chart shows the distribution of the number of ratings and average rating.
+# The last chart shows the distribution of the number of ratings and average rating.
 
 # Display the number of ratings and average rating per movie.
 alt.hconcat(
@@ -281,23 +281,12 @@ def sparse_mean_square_error(sparse_ratings, user_embeddings, movie_embeddings):
   loss = tf2.losses.mean_squared_error(sparse_ratings.values, predictions)
   return loss
 
-Note: One approach is to compute the full prediction matrix $UV^\top$, then gather the entries corresponding to the observed pairs. The memory cost of this approach is $O(NM)$. For the MovieLens dataset, this is fine, as the dense $N \times M$ matrix is small enough to fit in memory ($N = 943$, $M = 1682$).
+# Note: One approach is to compute the full prediction matrix $UV^\top$, then gather the entries corresponding to the observed pairs. The memory cost of this approach is $O(NM)$. For the MovieLens dataset, this is fine, as the dense $N \times M$ matrix is small enough to fit in memory ($N = 943$, $M = 1682$).
 
-Another approach (given in the alternate solution below) is to only gather the embeddings of the observed pairs, then compute their dot products. The memory cost is $O(|\Omega| d)$ where $d$ is the embedding dimension. In our case, $|\Omega| = 10^5$, and the embedding dimension is on the order of $10$, so the memory cost of both methods is comparable. But when the number of users or movies is much larger, the first approach becomes infeasible.
+# Another approach (given in the alternate solution below) is to only gather the embeddings of the observed pairs, then compute their dot products. The memory cost is $O(|\Omega| d)$ where $d$ is the embedding dimension. In our case, $|\Omega| = 10^5$, and the embedding dimension is on the order of $10$, so the memory cost of both methods is comparable. But when the number of users or movies is much larger, the first approach becomes infeasible.
 
 #Alternative Solution
 def sparse_mean_square_error(sparse_ratings, user_embeddings, movie_embeddings):
-  """
-  Args:
-    sparse_ratings: A SparseTensor rating matrix, of dense_shape [N, M]
-    user_embeddings: A dense Tensor U of shape [N, k] where k is the embedding
-      dimension, such that U_i is the embedding of user i.
-    movie_embeddings: A dense Tensor V of shape [M, k] where k is the embedding
-      dimension, such that V_j is the embedding of movie j.
-  Returns:
-    A scalar Tensor representing the MSE between the true ratings and the
-      model's predictions.
-  """
   predictions = tf2.reduce_sum(
       tf2.gather(user_embeddings, sparse_ratings.indices[:, 0]) *
       tf2.gather(movie_embeddings, sparse_ratings.indices[:, 1]),
@@ -388,7 +377,7 @@ class CFModel(object):
           ax.legend()
       return results
 
-Using the `sparse_mean_square_error` function, we will write a function that builds a `CFModel` by creating the embedding variables and the train and test losses.
+# Using the `sparse_mean_square_error` function, we will write a function that builds a `CFModel` by creating the embedding variables and the train and test losses.
 
 def build_model(ratings, embedding_dim=3, init_stddev=1.):
   """
