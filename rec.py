@@ -11,7 +11,7 @@ import sklearn.manifold
 import tensorflow.compat.v1 as tf2
 tf2.disable_v2_behavior()
 
-import altair as alt985
+import altair as alt
 import pandas as pd
 
 
